@@ -43,7 +43,7 @@ router.get('/states', function(req, res, next) {
 
     pg.queryDeferred(preparedStatement)
         .then(function(result){
-            res.send(JSON.stringify(result[0]));
+            res.send(JSON.stringify(result[0].response));
         })
         .catch(function(err){
             next(err);
@@ -55,7 +55,7 @@ router.get('/states', function(req, res, next) {
 /*
  * Get all state data
  */
-router.get('/all-state-data', function(req, res, next) {
+router.get('/state-data', function(req, res, next) {
     console.log('get album votes');
 
 
@@ -70,7 +70,65 @@ router.get('/all-state-data', function(req, res, next) {
 
     pg.queryDeferred(preparedStatement)
         .then(function(result){
-            res.send(JSON.stringify(result[0]));
+            res.send(JSON.stringify(result[0].response));
+        })
+        .catch(function(err){
+            next(err);
+        });
+
+});
+
+
+/*
+ * Get all state data for a particular indicator
+ */
+router.get('/state-data/:indicator_id', function(req, res, next) {
+    console.log('get album votes');
+
+
+    // All columns in table with the exception of the geometry column
+    var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
+
+    var wc = {whereClause :"WHERE indicator_id = " + req.params.indicator_id };
+    //var wc = "WHERE indicator_id = " + req.params.indicator_id;
+
+    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns, wc);
+    var preparedStatement = {
+        name: "get_full_state_data_info",
+        text: sql,
+        values:[]};
+
+    pg.queryDeferred(preparedStatement)
+        .then(function(result){
+            res.send(JSON.stringify(result[0].response));
+        })
+        .catch(function(err){
+            next(err);
+        });
+
+});
+
+
+/*
+ * Get all state data for a particular indicator
+ */
+router.get('/indicator-data/:indicator_id', function(req, res, next) {
+    console.log('get album votes');
+
+
+    // All columns in table with the exception of the geometry column
+    var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
+
+    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns);
+
+    var preparedStatement = {
+        name: "get_full_state_data_info",
+        text: sql,
+        values:[]};
+
+    pg.queryDeferred(preparedStatement)
+        .then(function(result){
+            res.send(JSON.stringify(result[0].response));
         })
         .catch(function(err){
             next(err);

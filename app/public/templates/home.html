@@ -12,3 +12,24 @@
     </div>
 
 </div>
+
+
+<div ng-repeat="state in states">
+    <div>State Id : {{ state.properties.id }}</div>
+    <div>State Name: {{ state.properties.name }}</div>
+</div>
+
+
+<div ng-repeat="sd in stateData">
+    <div>State Name : {{ sd.properties.name }}</div>
+    <div>Indicator Title: {{ sd.properties.indicator_title }}</div>
+    <div>Indicator Value: {{ sd.properties.indicator_value }}</div>
+</div>
+
+JSON TUTORIAL
+
+<div id="svgChart"></div>
+
+<div id="mapChart"></div>
+
+<div id="addData">Add Data</div>

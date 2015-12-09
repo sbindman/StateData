@@ -46,9 +46,11 @@
     color: white;
 }
 
-.chart rect {
-    fill:rgb(63,81,181);
-}
+/*.chart rect {*/
+    /*fill:rgb(63,81,181);*/
+/*}*/
+
+
 
 .chart text {
     fill: white;
@@ -62,4 +64,18 @@
 
 .chart {
     margin: 50px;
+}
+
+
+.land {
+    fill: #222;
+}
+.county-boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+}
+.state-boundary {
+    fill: none;
+    stroke: #fff;
 }
