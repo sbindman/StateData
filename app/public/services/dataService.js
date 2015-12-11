@@ -21,7 +21,7 @@ var app = angular.module("myApp")
         service.getAllStateData = function() {
             var deferred = $q.defer();
 
-            $http.get('api/state-data')
+            $http.get('api/data')
                 .then(function (response) {
                     deferred.resolve(response);
 
@@ -31,6 +31,22 @@ var app = angular.module("myApp")
 
             return deferred.promise;
         }
+
+
+        service.getOneStateData = function(state_name) {
+            var deferred = $q.defer();
+
+            $http.get('api/data?state=' + state_name)
+                .then(function (response) {
+                    deferred.resolve(response);
+
+                }, function (response) {
+                    deferred.reject(response);
+                });
+
+            return deferred.promise;
+        }
+
 
 
         return service;

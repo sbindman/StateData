@@ -29,7 +29,7 @@ var pg = require('../pg');
  * Get list of all states
  */
 router.get('/states', function(req, res, next) {
-    console.log('get all states');
+
 
 
     // All columns in table with the exception of the geometry column
@@ -54,21 +54,29 @@ router.get('/states', function(req, res, next) {
 
 /*
  * Get all state data
+ * optional parameter to search for a single state
+ * /data?state=State_Name
  */
-router.get('/state-data', function(req, res, next) {
-    console.log('get album votes');
+router.get('/data', function(req, res, next) {
 
+    wc = {};
+    params = {};
+
+    if (req.query.state) {
+        wc = {whereClause :"WHERE name = $1" };
+        params = {sqlParams: [req.query.state]}
+    }
 
     // All columns in table with the exception of the geometry column
     var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
 
-    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns);
+    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns, wc);
     var preparedStatement = {
         name: "get_full_state_data_info",
         text: sql,
-        values:[]};
+        values:[req.query]};
 
-    pg.queryDeferred(preparedStatement)
+    pg.queryDeferred(preparedStatement, params)
         .then(function(result){
             res.send(JSON.stringify(result[0].response));
         })
@@ -82,15 +90,14 @@ router.get('/state-data', function(req, res, next) {
 /*
  * Get all state data for a particular indicator
  */
-router.get('/state-data/:indicator_id', function(req, res, next) {
+router.get('/data/indicator/:indicator_id', function(req, res, next) {
     console.log('get album votes');
 
 
     // All columns in table with the exception of the geometry column
     var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
 
-    var wc = {whereClause :"WHERE indicator_id = " + req.params.indicator_id };
-    //var wc = "WHERE indicator_id = " + req.params.indicator_id;
+    var wc = {whereClause :"WHERE indicator_id = $1" };
 
     var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns, wc);
     var preparedStatement = {
@@ -98,7 +105,7 @@ router.get('/state-data/:indicator_id', function(req, res, next) {
         text: sql,
         values:[]};
 
-    pg.queryDeferred(preparedStatement)
+    pg.queryDeferred(preparedStatement, {sqlParams: [req.params.indicator_id]})
         .then(function(result){
             res.send(JSON.stringify(result[0].response));
         })
@@ -110,23 +117,25 @@ router.get('/state-data/:indicator_id', function(req, res, next) {
 
 
 /*
- * Get all state data for a particular indicator
+ * Get all data for a particular state
  */
-router.get('/indicator-data/:indicator_id', function(req, res, next) {
+router.get('/data/state/:state_id', function(req, res, next) {
     console.log('get album votes');
 
 
     // All columns in table with the exception of the geometry column
     var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
 
-    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns);
+    var wc = {whereClause :"WHERE state_id = $1" };
 
+
+    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns, wc);
     var preparedStatement = {
-        name: "get_full_state_data_info",
-        text: sql,
-        values:[]};
+        name: "get_one_state_data_info",
+        text: sql
+    };
 
-    pg.queryDeferred(preparedStatement)
+    pg.queryDeferred(preparedStatement, {sqlParams: [1]} )
         .then(function(result){
             res.send(JSON.stringify(result[0].response));
         })
@@ -135,6 +144,35 @@ router.get('/indicator-data/:indicator_id', function(req, res, next) {
         });
 
 });
+
+
+
+///*
+// * Get all states data for a particular indicator
+// */
+//router.get('/indicator-data/:indicator_id', function(req, res, next) {
+//    console.log('get album votes');
+//
+//
+//    // All columns in table with the exception of the geometry column
+//    var nonGeomColumns = "state_id, indicator_id, indicator_value, indicator_title, name";
+//
+//    var sql = pg.featureCollectionSQL("full_state_data_info", nonGeomColumns);
+//
+//    var preparedStatement = {
+//        name: "get_full_state_data_info",
+//        text: sql,
+//        values:[]};
+//
+//    pg.queryDeferred(preparedStatement)
+//        .then(function(result){
+//            res.send(JSON.stringify(result[0].response));
+//        })
+//        .catch(function(err){
+//            next(err);
+//        });
+//
+//});
 
 
 

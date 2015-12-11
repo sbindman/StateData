@@ -75,7 +75,34 @@
     stroke: #fff;
     stroke-width: .5px;
 }
-.state-boundary {
-    fill: none;
-    stroke: #fff;
+.state {
+    fill: white;
+    stroke: #aaa;
 }
+
+.state.active {
+    fill: orange;
+}
+
+#mapChart svg {
+    margin: 50px;
+    width: 50%;
+    background: red;
+    height: 300px;
+}
+
+body {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.area {
+    fill: steelblue;
+}
+

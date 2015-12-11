@@ -10,7 +10,18 @@ angular.module('myApp', [
                 templateUrl: 'public/templates/home.html',
                 controller: 'HomeCtrl'
             })
-
+            .when('/material', {
+                templateUrl: 'public/templates/material.html',
+                controller: 'MaterialCtrl'
+            })
+            .when('/sideToggle', {
+                templateUrl: 'public/templates/sideToggle.html',
+                controller: 'SideCtrl'
+            })
+            .when('/d3', {
+                templateUrl: 'public/templates/d3.html',
+                controller: 'D3Ctrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });

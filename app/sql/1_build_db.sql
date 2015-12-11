@@ -72,8 +72,31 @@ INSERT INTO state_data (state_id, indicator_id, indicator_value) VALUES (5,3, 36
 
 
 
---CREATE OR REPLACE FUNCTION vote_song(songId int, roundId int)
---  RETURNS boolean AS $$
+
+CREATE or REPLACE FUNCTION state_lookup(state_name character varying) RETURNS int AS $$
+
+DECLARE
+name_to_id int;
+
+BEGIN
+
+    SELECT INTO name_to_id id FROM state WHERE name = state_name;
+
+    IF name_to_id IS NOT NULL THEN
+
+
+
+        RETURN name_to_id;
+    ELSE
+        RAISE EXCEPTION 'Cannot find state match';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+--CREATE OR REPLACE FUNCTION state_name_to_id( name character varying )
+--  RETURNS int AS $$
 --  DECLARE
 --
 -- valid_song_id int;
@@ -82,8 +105,7 @@ INSERT INTO state_data (state_id, indicator_id, indicator_value) VALUES (5,3, 36
 --
 --BEGIN
 --
---    SELECT INTO valid_song_id id FROM song WHERE id = $1;
---    SELECT INTO valid_round_id id FROM round WHERE id = $2;
+--    SELECT INTO id FROM state WHERE name = $1;
 --
 --    INSERT INTO song_votes(song_id, round) VALUES (valid_song_id, valid_round_id) RETURNING submission_time INTO submission;
 --
