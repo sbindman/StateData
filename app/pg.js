@@ -13,8 +13,6 @@ var conString = "postgres://" +
 
 var pg = new Client();
 
-//var conString = 'postgres://gzzmncituhhtxm:re4E13HP-uqTlwGW71xoeH25F_@ec2-54-204-30-115.compute-1.amazonaws.com:5432/d491g46d8uagv';
-
 
 /**
  * Main query function to execute an SQL query; callback form.
